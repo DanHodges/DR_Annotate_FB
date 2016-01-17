@@ -4,8 +4,8 @@ module.exports = function($routeParams, $http, $sce, $scope, $q) {
   let vm = this,
       mergeSortObjects = require('./../helpers/mergeSort'), 
       makeDomString = require('./../helpers/makeDomString'),
-      chapterGET = $http({method: 'GET', url: 'https://drdummy.firebaseio.com/chapters.json/', cache: 'true'}),
-      annotationGET = $http({method: 'GET', url: 'https://drdummy.firebaseio.com/annotations.json/', cache: 'true'}),
+      chapterGET = $http({method: 'GET', url: 'https://drtest.firebaseio.com/chapters.json/', cache: 'true'}),
+      annotationGET = $http({method: 'GET', url: 'https://drtest.firebaseio.com/annotations.json/', cache: 'true'}),
 
       annotations = [],
       chapterString = "",
@@ -14,8 +14,8 @@ module.exports = function($routeParams, $http, $sce, $scope, $q) {
   vm.newAnnotation = '';
   vm.newAnnotationContent = '';
   vm.selectedNewAnnotation = '';
-  vm.content = "selection";
-  vm.category = "category";
+  vm.content = "Selection";
+  vm.category = "Category";
   vm.id = "";
   vm.data = "";
 
@@ -37,6 +37,7 @@ module.exports = function($routeParams, $http, $sce, $scope, $q) {
   vm.click = function (arg) {
     vm.category = arg.path[0].className.replace('ng-scope','').trim();
     vm.content = document.getElementById(arg.path[0].id).innerText;
+    vm.selection = document.getElementById(arg.path[0].id).innerText;
     vm.id = arg.path[0].id;
   }
 
@@ -46,26 +47,50 @@ module.exports = function($routeParams, $http, $sce, $scope, $q) {
   }    
 
   vm.addAnnotation = function(){
-    let ref = new Firebase("https://drdummy.firebaseio.com/annotations/");
     if(vm.category == "category"){window.alert("Please Select a Category"); return null;}
-    ref.push({
+    let ref = new Firebase("https://drtest.firebaseio.com/annotations/");
+    let newAnnotation = {
       category: vm.category,
       content: vm.newAnnotationContent,
       start : parseInt(vm.id),
       end: parseInt(vm.id) + vm.newAnnotationContent.length -1
-    });
+    };
+    ref.push(newAnnotation);
+    annotations.push(newAnnotation);
+    annotations = mergeSortObjects(annotations);
+    $scope.domString = makeDomString(chapterString, annotations);
+    cleanDomString = $scope.domString.slice();
+    vm.newAnnotation = '';
+    vm.content = "Selection";
+    vm.category = "Category";
+    vm.id = "";
   }
 
   vm.update = function () {
     document.getElementById(vm.id).className = vm.category;
-    let ref = new Firebase("https://drdummy.firebaseio.com/annotations/"+ vm.id +"/category");
+    let ref = new Firebase("https://drtest.firebaseio.com/annotations/"+ vm.id +"/category");
     ref.set(vm.category);
+    vm.content = "Selection";
+    vm.category = "Category";
+    vm.id = "";    
   }
 
   vm.remove = function () {
-    let ref = new Firebase("https://drdummy.firebaseio.com/annotations/"+ vm.id);
+    let ref = new Firebase("https://drtest.firebaseio.com/annotations/"+ vm.id);
     ref.set(null);
-    document.getElementById(vm.id).className = null;
+    for (var i of annotations){
+      if(i.key === vm.id) {
+        let index = annotations.indexOf(i);
+        console.log(index);
+        annotations.splice(index, 1);
+      }
+    }
+    annotations = mergeSortObjects(annotations);
+    $scope.domString = makeDomString(chapterString, annotations);
+    cleanDomString = makeDomString(chapterString, annotations);
+    vm.content = "Selection";
+    vm.category = "Category";
+    vm.id = "";    
   }
 
   vm.viewjson = function () {
@@ -75,6 +100,9 @@ module.exports = function($routeParams, $http, $sce, $scope, $q) {
   vm.clear = function () {
     $scope.domString  = cleanDomString.slice();
     vm.newAnnotation = '';
+    vm.content = "Selection";
+    vm.category = "Category";
+    vm.id = "";    
   }
 
   document.ondblclick = function () {
