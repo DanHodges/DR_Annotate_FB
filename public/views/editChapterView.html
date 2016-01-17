@@ -1,0 +1,24 @@
+﻿<div class="editor-nav " ng-cloak>
+  <h4 class="label label-default">Controlls</h4>
+  <ul  class="list-group">
+      <li >{{vm.content}}</li>
+      <li>{{vm.category}}</li>
+      <li class="tiny">{{vm.id}}</li>
+      <li>
+				<input type="radio" name="fc" value="PERSON" ng-model="vm.category">PERSON</input><br>
+				<input type="radio" name="fc" value="LOCATION" ng-model="vm.category">LOCATION</input><br>
+				<input type="radio" name="fc" value="ORGANIZATION" ng-model="vm.category">ORGANIZATION</input>             	
+      </li>
+      <div class="btn-group btn-group-sm" role="group" aria-label="...">
+        <button type="button" class="btn btn-default" ng-click="vm.update()">Update</button> 
+        <button type="button" class="btn btn-default" ng-click="vm.remove()">Remove</button>
+      </div>
+  </ul>
+  <input placeholder="find" type="text" ng-model="vm.newAnnotation">
+  <button class="btn btn-default" ng-click="vm.findAnnotation()">Find</button> 
+  <button class="btn btn-default" ng-click="vm.clear()">Clear</button>   
+  <button class="btn btn-default" ng-click="vm.addAnnotation()">Add</button>    
+  <button class="btn btn-default" ng-click="vm.viewjson()">Log </button>
+</div>
+
+<div class="section" id="allText" directive="domString"></div>
