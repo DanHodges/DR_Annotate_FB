@@ -1,0 +1,9 @@
+{
+  "firebase": "drtest",
+  "public": "public",
+  "ignore": [
+    "firebase.json",
+    "**/.*",
+    "**/node_modules/**"
+  ]
+}

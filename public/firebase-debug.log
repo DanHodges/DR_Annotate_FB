@@ -1,0 +1,11 @@
+[debug] ----------------------------------------------------------------------
+[debug] Command:      /usr/local/Cellar/node/5.0.0/bin/node /usr/local/bin/firebase init
+[debug] Platform:     darwin
+[debug] Node Version: v5.0.0
+[debug] Time:         Sat Jan 16 2016 21:39:52 GMT-0600 (CST)
+[debug] ----------------------------------------------------------------------
+[debug] 
+[warn] ⚠  Initializing in a directory with 5 files
+[warn] 
+[debug] >>> HTTP REQUEST GET https://admin.firebase.com/account?token=XXX 
+[debug] <<< HTTP RESPONSE 200

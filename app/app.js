@@ -16,20 +16,20 @@
       controller: 'selectChapterController',
       controllerAs: "vm",
       templateUrl: "./../views/selectChapterView.html"
-    });
+    })
     $routeProvider.when("/edit/:chapter", {
       controller: 'annotationController',
       controllerAs: "vm",
       templateUrl: "./../views/editChapterView.html"
-    });
-    $routeProvider.otherwise({ redirectTo: "/" });
+    })
+    $routeProvider.otherwise({ redirectTo: "/" })
   })
 
   .controller('selectChapterController',selectChapterController)
   .controller('annotationController', annotationController)
-  .directive("directive", directive);
+  .directive('directive', directive)
 
-  annotationController.$inject = ['$routeParams', '$http', '$sce', '$scope'];
+  annotationController.$inject = ['$routeParams', '$http', '$sce', '$scope', '$q'];
   selectChapterController.$inject = ['$http'];
   directive.$inject = ['$compile'];
 
