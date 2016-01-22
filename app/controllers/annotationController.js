@@ -4,8 +4,8 @@ module.exports = function($routeParams, $http, $sce, $scope, $q) {
   let vm = this,
       mergeSortObjects = require('./../helpers/mergeSort'), 
       makeDomString = require('./../helpers/makeDomString'),
-      chapterGET = $http({method: 'GET', url: 'https://drdummy.firebaseio.com/chapters.json/', cache: 'true'}),
-      annotationGET = $http({method: 'GET', url: 'https://drdummy.firebaseio.com/annotations.json/', cache: 'true'}),
+      chapterGET = $http({method: 'GET', url: 'https://drtest.firebaseio.com/chapters.json/', cache: 'true'}),
+      annotationGET = $http({method: 'GET', url: 'https://drtest.firebaseio.com/annotations.json/', cache: 'true'}),
 
       annotations = [],
       chapterString = "",
@@ -54,7 +54,7 @@ module.exports = function($routeParams, $http, $sce, $scope, $q) {
   vm.addAnnotation = function(){
     vm.category = vm.category.replace('ng-scope','').trim();
     if(vm.category === ('Category' || 'MAYBE' || '')){window.alert("Please Select a Category"); return null;}
-    let ref = new Firebase("https://drdummy.firebaseio.com/annotations/");
+    let ref = new Firebase("https://drtest.firebaseio.com/annotations/");
     let newAnnotation = {
       bookTitle: "Alice in Wonderland",
       chapterNumber: $routeParams.chapter,
@@ -79,7 +79,7 @@ module.exports = function($routeParams, $http, $sce, $scope, $q) {
 
   vm.update = function () {
     document.getElementById(vm.id).className = vm.category;
-    let ref = new Firebase("https://drdummy.firebaseio.com/annotations/"+ vm.id +"/category");
+    let ref = new Firebase("https://drtest.firebaseio.com/annotations/"+ vm.id +"/category");
     //ref.set(vm.category);
     vm.content = "Selection";
     vm.category = "Category";
@@ -87,7 +87,7 @@ module.exports = function($routeParams, $http, $sce, $scope, $q) {
   }
 
   vm.remove = function () {
-    let ref = new Firebase("https://drdummy.firebaseio.com/annotations/"+ vm.id);
+    let ref = new Firebase("https://drtest.firebaseio.com/annotations/"+ vm.id);
     for (var i of annotations){
       // == instead of === to account for strings and such
       if(i.key == vm.id) {
