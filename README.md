@@ -2,7 +2,7 @@
 
 ## About
 
-This is a client side app that uses firebase to store json. Users can update, add, and remove annotations from chapter of a book.
+This is a client side app that uses firebase to store json. Users can update, add, and remove annotations from chapter of a book. Only annotations for chapters 8 & 9 have been added to the database.
 
 ## Known Issues & Notes
 Adding annotations is a little buggy. The adding process isn't super intuitive. Version 2 will feature clear messages with data
