@@ -36,6 +36,7 @@ module.exports = function($routeParams, $http, $sce, $scope, $q) {
   });  
 
   vm.click = function (arg) { 
+    //elements with ids of MAYBE are potential annotations that are highlighted red
     if (arg.path[0].className.includes("MAYBE")){
       vm.id = arg.path[0].id;
       console.log(arg.path[0]);
@@ -64,10 +65,13 @@ module.exports = function($routeParams, $http, $sce, $scope, $q) {
     }; 
     var refId = ref.push(newAnnotation);
     var key = refId.key();
-    console.log(key);
+    //add annotation to all annotations with Firebase key set as ID
     newAnnotation.key = key;
     annotations.push(newAnnotation);
     annotations = mergeSortObjects(annotations);
+    //update new dom string with annotations. cleanDomString is will not include 
+    //'maybe' annotations. That way after a double click, you can click 'clear' and revert to
+    //the domString with real annotations
     $scope.domString = makeDomString(chapterString, annotations);
     cleanDomString = $scope.domString.slice();
     vm.newAnnotation = '';
@@ -79,7 +83,7 @@ module.exports = function($routeParams, $http, $sce, $scope, $q) {
   vm.update = function () {
     document.getElementById(vm.id).className = vm.category;
     let ref = new Firebase(`https://drtest.firebaseio.com/${$routeParams.chapter}${vm.id}/category`);
-    //ref.set(vm.category);
+    ref.set(vm.category);
     vm.content = "Selection";
     vm.category = "Category";
     vm.id = "";    
@@ -91,10 +95,10 @@ module.exports = function($routeParams, $http, $sce, $scope, $q) {
       // == instead of === to account for strings and such
       if(i.key == vm.id) {
         let index = annotations.indexOf(i);
-        console.log('index ', index);
         annotations.splice(index, 1);
       }
     }
+    ref.set(null);
     annotations = mergeSortObjects(annotations);
     $scope.domString = makeDomString(chapterString, annotations);
     cleanDomString = makeDomString(chapterString, annotations);
