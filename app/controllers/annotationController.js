@@ -126,6 +126,7 @@ module.exports = function($routeParams, $http, $sce, $scope, $q) {
     $scope.$apply();
   };  
 
+  //this is the function that highlights all the potential annotations red.
   vm.findAnnotation = function () {
     if(vm.newAnnotation.length < 3){return null};
     let string = document.getElementById('allText').innerText;
@@ -144,6 +145,7 @@ module.exports = function($routeParams, $http, $sce, $scope, $q) {
     $scope.domString = newString.slice();
   }
 
+  //getAllIndexes returns an array of all indexes of a particular string
   function getAllIndexes(string, val) {
     let indexes = [], i;
     indexes.push(string.indexOf(val));
