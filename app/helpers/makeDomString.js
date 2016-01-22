@@ -4,6 +4,7 @@ function makeDomString (inputString, array) {
     outputString+=
     inputString.substring(0, array[0].start);
   }
+  // need to convert to es6 string templates
   for (var i = 0; i < length; i++) {
     var iPlus = i + 1, nonAnnotationStart = parseInt(array[i].end) + 1;
 
@@ -15,6 +16,7 @@ function makeDomString (inputString, array) {
     if (nonAnnotationStart < nonAnnotationEnd) {
       outputString += inputString.substring(nonAnnotationStart, nonAnnotationEnd); 
     }
+    //need to move this outside the for loop
     if(i === length - 1 && array[i].end < inputString.length){
       outputString+= inputString.substring(nonAnnotationStart, inputString.length)
     }

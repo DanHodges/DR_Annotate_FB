@@ -4,8 +4,8 @@ module.exports = function($routeParams, $http, $sce, $scope, $q) {
   let vm = this,
       mergeSortObjects = require('./../helpers/mergeSort'), 
       makeDomString = require('./../helpers/makeDomString'),
-      chapterGET = $http({method: 'GET', url: 'https://drtest.firebaseio.com/chapters.json/', cache: 'true'}),
-      annotationGET = $http({method: 'GET', url: 'https://drtest.firebaseio.com/annotations.json/', cache: 'true'}),
+      chapterGET = $http({method: 'GET', url: 'https://drdummy.firebaseio.com/chapters.json/', cache: 'true'}),
+      annotationGET = $http({method: 'GET', url: 'https://drdummy.firebaseio.com/annotations.json/', cache: 'true'}),
 
       annotations = [],
       chapterString = "",
@@ -25,6 +25,8 @@ module.exports = function($routeParams, $http, $sce, $scope, $q) {
         chapterString = response[0].data[i].text;
       }
     }
+    // I am setting the randomly generated firebase key to be an object property on each annotation
+    // I will use that key property to be the dom #ID
     for (let i in response[1].data) {
       if(!response[1].data[i].key){response[1].data[i].key = i};
       annotations.push(response[1].data[i]);
@@ -34,28 +36,37 @@ module.exports = function($routeParams, $http, $sce, $scope, $q) {
     cleanDomString = $scope.domString.slice();
   });  
 
-  vm.click = function (arg) {
-    vm.category = arg.path[0].className.replace('ng-scope','').trim();
-    vm.content = document.getElementById(arg.path[0].id).innerText;
-    vm.selection = document.getElementById(arg.path[0].id).innerText;
-    vm.id = arg.path[0].id;
+  vm.click = function (arg) { 
+    if (arg.path[0].className.includes("MAYBE")){
+      vm.id = arg.path[0].id;
+      console.log(arg.path[0]);
+      console.log(vm.id);
+      vm.newAnnotationContent = document.getElementById(arg.path[0].id).innerText.trim(); 
+      console.log(vm.newAnnotationContent);
+    } else {
+      vm.category = arg.path[0].className.replace('ng-scope','').trim();
+      vm.content = document.getElementById(arg.path[0].id).innerText;
+      vm.selection = document.getElementById(arg.path[0].id).innerText;
+      vm.id = arg.path[0].id;
+    }
   }
 
-  vm.clicktwo = function (arg) {
-    vm.id = arg.path[0].id;
-    vm.newAnnotationContent = document.getElementById(arg.path[0].id).innerText;
-  }    
-
   vm.addAnnotation = function(){
-    if(vm.category == "category"){window.alert("Please Select a Category"); return null;}
-    let ref = new Firebase("https://drtest.firebaseio.com/annotations/");
+    vm.category = vm.category.replace('ng-scope','').trim();
+    if(vm.category === ('Category' || 'MAYBE' || '')){window.alert("Please Select a Category"); return null;}
+    let ref = new Firebase("https://drdummy.firebaseio.com/annotations/");
     let newAnnotation = {
+      bookTitle: "Alice in Wonderland",
+      chapterNumber: $routeParams.chapter,
       category: vm.category,
       content: vm.newAnnotationContent,
       start : parseInt(vm.id),
       end: parseInt(vm.id) + vm.newAnnotationContent.length -1
-    };
-    ref.push(newAnnotation);
+    }; 
+    var refId = ref.push(newAnnotation);
+    var key = refId.key();
+    console.log(key);
+    newAnnotation.key = key;
     annotations.push(newAnnotation);
     annotations = mergeSortObjects(annotations);
     $scope.domString = makeDomString(chapterString, annotations);
@@ -68,20 +79,20 @@ module.exports = function($routeParams, $http, $sce, $scope, $q) {
 
   vm.update = function () {
     document.getElementById(vm.id).className = vm.category;
-    let ref = new Firebase("https://drtest.firebaseio.com/annotations/"+ vm.id +"/category");
-    ref.set(vm.category);
+    let ref = new Firebase("https://drdummy.firebaseio.com/annotations/"+ vm.id +"/category");
+    //ref.set(vm.category);
     vm.content = "Selection";
     vm.category = "Category";
     vm.id = "";    
   }
 
   vm.remove = function () {
-    let ref = new Firebase("https://drtest.firebaseio.com/annotations/"+ vm.id);
-    ref.set(null);
+    let ref = new Firebase("https://drdummy.firebaseio.com/annotations/"+ vm.id);
     for (var i of annotations){
-      if(i.key === vm.id) {
+      // == instead of === to account for strings and such
+      if(i.key == vm.id) {
         let index = annotations.indexOf(i);
-        console.log(index);
+        console.log('index ', index);
         annotations.splice(index, 1);
       }
     }
@@ -110,7 +121,7 @@ module.exports = function($routeParams, $http, $sce, $scope, $q) {
       (window.getSelection && window.getSelection().toString());
     vm.findAnnotation();
     $scope.$apply();
-  };    
+  };  
 
   vm.findAnnotation = function () {
     if(vm.newAnnotation.length < 3){return null};
@@ -121,10 +132,10 @@ module.exports = function($routeParams, $http, $sce, $scope, $q) {
     let newString = '';
     //get string up to first index
     newString += string.slice(0, indexes[0]);
-    newString += `<span id= ${indexes[0]} class=MAYBE ng-click= vm.clicktwo($event)> ${vm.newAnnotation} </span>`;
+    newString += `<span id= ${indexes[0]} class=MAYBE ng-click= vm.click($event)> ${vm.newAnnotation} </span>`;
     for(let i = 1; i < indexes.length; i++){
       newString += string.slice(indexes[i - 1] + stringLenth, indexes[i]);
-      newString += `<span id= ${indexes[i]} class=MAYBE ng-click=vm.clicktwo($event)> ${vm.newAnnotation} </span>`;
+      newString += `<span id= ${indexes[i]} class=MAYBE ng-click=vm.click($event)> ${vm.newAnnotation} </span>`;
     }
     newString += string.slice(indexes[indexes.length - 1]);
     $scope.domString = newString.slice();
