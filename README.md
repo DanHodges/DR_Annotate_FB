@@ -29,7 +29,8 @@ To view this application and its code, run:
 
 ## Serving & Use
 
-* From your project directory, run your prefered HTTP gulp.
+* From the root directory, run gulp js.
+* From the public directory, run your prefered HTTP server.
 
 ## Contact
 
