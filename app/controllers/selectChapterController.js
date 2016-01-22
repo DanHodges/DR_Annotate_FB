@@ -4,7 +4,7 @@ module.exports = function($http) {
 
   vm.chapters = [];
 
-  $http.get("https://drtest.firebaseio.com/chapters.json/")
+  $http.get("https://drdummy.firebaseio.com/chapters.json/")
     .then(function (response) {
       for (let i in response.data){
         vm.chapters.push({
