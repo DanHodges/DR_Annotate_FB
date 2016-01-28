@@ -36,7 +36,7 @@ module.exports = function($routeParams, $http, $sce, $scope, $q) {
   });  
 
   vm.click = function (arg) { 
-    //elements with ids of MAYBE are potential annotations that are highlighted red
+    // elements with ids of MAYBE are potential annotations that are highlighted red
     if (arg.path[0].className.includes("MAYBE")){
       vm.id = arg.path[0].id;
       console.log(arg.path[0]);
@@ -135,9 +135,9 @@ module.exports = function($routeParams, $http, $sce, $scope, $q) {
     let string = document.getElementById('allText').innerText;
     let indexes = getAllIndexes(string, vm.newAnnotation);
     let stringLenth = vm.newAnnotation.length;
-    //new string we will save to dom
+    // new string we will save to dom
     let newString = '';
-    //get string up to first index
+    // get string up to first index
     newString += string.slice(0, indexes[0]);
     newString += `<span id= ${indexes[0]} class=MAYBE ng-click= vm.click($event)> ${vm.newAnnotation} </span>`;
     for(let i = 1; i < indexes.length; i++){
