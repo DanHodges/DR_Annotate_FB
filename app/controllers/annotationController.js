@@ -82,7 +82,8 @@ module.exports = function($routeParams, $http, $sce, $scope, $q) {
 
   vm.update = function () {
     document.getElementById(vm.id).className = vm.category;
-    let ref = new Firebase(`https://drtest.firebaseio.com/${$routeParams.chapter}${vm.id}/category`);
+    let ref = new Firebase(`https://drtest.firebaseio.com/${$routeParams.chapter}/${vm.id}/category`);
+    console.log(ref);
     ref.set(vm.category);
     vm.content = "Selection";
     vm.category = "Category";
@@ -90,7 +91,8 @@ module.exports = function($routeParams, $http, $sce, $scope, $q) {
   }
 
   vm.remove = function () {
-    let ref = new Firebase(`https://drtest.firebaseio.com/${$routeParams.chapter}${vm.id}`);
+    let ref = new Firebase(`https://drtest.firebaseio.com/${$routeParams.chapter}/${vm.id}`);
+    console.log(ref);
     for (var i of annotations){
       // == instead of === to account for strings and such
       if(i.key == vm.id) {
@@ -98,6 +100,7 @@ module.exports = function($routeParams, $http, $sce, $scope, $q) {
         annotations.splice(index, 1);
       }
     }
+    console.log(`https://drtest.firebaseio.com/${$routeParams.chapter}/${vm.id}`);
     ref.set(null);
     annotations = mergeSortObjects(annotations);
     $scope.domString = makeDomString(chapterString, annotations);
