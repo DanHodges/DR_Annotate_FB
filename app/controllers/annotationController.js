@@ -65,13 +65,13 @@ module.exports = function($routeParams, $http, $sce, $scope, $q) {
     }; 
     var refId = ref.push(newAnnotation);
     var key = refId.key();
-    //add annotation to all annotations with Firebase key set as ID
+    // add annotation to all annotations with Firebase key set as ID
     newAnnotation.key = key;
     annotations.push(newAnnotation);
     annotations = mergeSortObjects(annotations);
-    //update new dom string with annotations. cleanDomString is will not include 
-    //'maybe' annotations. That way after a double click, you can click 'clear' and revert to
-    //the domString with real annotations
+    // update new dom string with annotations. cleanDomString is will not include 
+    // 'maybe' annotations. That way after a double click, you can click 'clear' and revert to
+    // the domString with real annotations
     $scope.domString = makeDomString(chapterString, annotations);
     cleanDomString = $scope.domString.slice();
     vm.newAnnotation = '';
@@ -129,7 +129,7 @@ module.exports = function($routeParams, $http, $sce, $scope, $q) {
     $scope.$apply();
   };  
 
-  //this is the function that highlights all the potential annotations red.
+  // this is the function that highlights all the potential annotations red.
   vm.findAnnotation = function () {
     if(vm.newAnnotation.length < 3){return null};
     let string = document.getElementById('allText').innerText;
@@ -148,7 +148,7 @@ module.exports = function($routeParams, $http, $sce, $scope, $q) {
     $scope.domString = newString.slice();
   }
 
-  //getAllIndexes returns an array of all indexes of a particular string
+  // getAllIndexes returns an array of all indexes of a particular string
   function getAllIndexes(string, val) {
     let indexes = [], i;
     indexes.push(string.indexOf(val));
